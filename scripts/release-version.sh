@@ -120,19 +120,19 @@ else
     exit 1
 fi
 
-echo -n "Checking that we are on the master branch..."
-if [ "`git rev-parse --abbrev-ref HEAD`" = "master" ]
+echo -n "Checking that we are on the main branch..."
+if [ "`git rev-parse --abbrev-ref HEAD`" = "main" ]
 then
     echo "OK"
 else
     echo "FAIL"
     echo
-    echo "Not currently on the master branch."
+    echo "Not currently on the main branch."
     ask_keep_going
 fi
 
-echo -n "Checking that we are up to date on master..."
-if git merge-base --is-ancestor origin/master HEAD
+echo -n "Checking that we are up to date on main..."
+if git merge-base --is-ancestor origin/main HEAD
 then
     echo "OK"
 else
@@ -144,8 +144,8 @@ else
     ask_keep_going
 fi
 
-echo -n "Checking that master is up to date on origin..."
-if git merge-base --is-ancestor HEAD origin/master
+echo -n "Checking that main is up to date on origin..."
+if git merge-base --is-ancestor HEAD origin/main
 then
     echo "OK"
 else
