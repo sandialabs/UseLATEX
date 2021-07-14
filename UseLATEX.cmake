@@ -1613,11 +1613,11 @@ function(add_latex_targets_internal)
     endif()
     foreach(extension ${LATEX_IMAGE_EXTENSIONS})
       if(${CMAKE_VERSION} VERSION_LESS "3.12")
-	file(GLOB files ${CMAKE_CURRENT_SOURCE_DIR}/${dir}/*${extension})
+        file(GLOB files ${CMAKE_CURRENT_SOURCE_DIR}/${dir}/*${extension})
       else()
-	file(GLOB files CONFIGURE_DEPENDS
-	  ${CMAKE_CURRENT_SOURCE_DIR}/${dir}/*${extension}
-	  )
+        file(GLOB files CONFIGURE_DEPENDS
+          ${CMAKE_CURRENT_SOURCE_DIR}/${dir}/*${extension}
+          )
       endif()
       foreach(file ${files})
         latex_get_filename_component(filename ${file} NAME)
