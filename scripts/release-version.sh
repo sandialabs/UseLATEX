@@ -157,14 +157,16 @@ else
     ask_keep_going
 fi
 
+commentChar=`git config core.commentChar` || commentChar='#'
+
 # We are finished with all the checks. Do the tag.
 echo -n "Tagging with $git_version_tag..."
 if git tag --annotate --edit --message="UseLATEX.cmake Release $version
 $version_notes
 
-# Write a message for tag:
-#   $git_version_tag
-# Lines starting with '#' will be ignored.
+$commentChar Write a message for tag:
+$commentChar   $git_version_tag
+$commentChar Lines starting with '$commentChar' will be ignored.
 " $git_version_tag
 then
     echo "OK"
