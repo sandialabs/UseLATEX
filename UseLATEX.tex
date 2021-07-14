@@ -2,7 +2,7 @@
 
 \documentclass{article}
 
-\newcommand{\UseLATEXVersion}{2.7.1}
+\newcommand{\UseLATEXVersion}{2.7.2}
 \newcommand{\SANDNumber}{SAND 2008-2743P}
 
 % This wonderful package allows hyphenation in tt fonts and hyphenation of
@@ -1200,6 +1200,9 @@ my.image.pdf to something like my-image.pdf.
   \textcmake{IMAGE\_DIRS} works by globbing files in those directories at the time that CMake is directly run.
   If you add a file to the directory, that file will not yet be part of the make files that CMake built, and there will be no known dependencies to try to find them.
   Simply running \textprog{cmake} again will re-perform the glob and fix the problem.
+
+  As of \UseLATEX version 2.7.2 and CMake version 3.12, a target is added to the build to check whether the list of files in any of the \textcmake{IMAGE\_DIRS} have changed.
+  Thus, this problem is much less likely to happen now, but it still can occur.
 
   \subsection{Why is the \textcmake{MANGLE\_TARGET\_NAMES} option deprecated?}
   \label{sec:Why_is_the_MANGLE_TARGET_NAMES_option_deprecated}
