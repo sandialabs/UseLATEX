@@ -120,6 +120,10 @@
 #
 # History:
 #
+# 2.7.2 Add CONFIGURE_DEPENDS option when globbing files to better detect
+#       when files in a directory change. This only happens for CMake 3.12
+#       or better.
+#
 # 2.7.1 Fix issues with printing log on errors when there are spaces in the
 #       path. (Thanks to Peter Knowles.)
 #
@@ -1357,7 +1361,11 @@ function(latex_process_images dvi_outputs_var pdf_outputs_var)
 endfunction(latex_process_images)
 
 function(latex_copy_globbed_files pattern dest)
-  file(GLOB file_list ${pattern})
+  if(${CMAKE_VERSION} VERSION_LESS "3.12")
+    file(GLOB file_list ${pattern})
+  else()
+    file(GLOB file_list CONFIGURE_DEPENDS ${pattern})
+  endif()
   foreach(in_file ${file_list})
     latex_get_filename_component(out_file ${in_file} NAME)
     configure_file(${in_file} ${dest}/${out_file} COPYONLY)
@@ -1604,7 +1612,13 @@ function(add_latex_targets_internal)
       message(WARNING "Image directory ${CMAKE_CURRENT_SOURCE_DIR}/${dir} does not exist.  Are you sure you gave relative directories to IMAGE_DIRS?")
     endif()
     foreach(extension ${LATEX_IMAGE_EXTENSIONS})
-      file(GLOB files ${CMAKE_CURRENT_SOURCE_DIR}/${dir}/*${extension})
+      if(${CMAKE_VERSION} VERSION_LESS "3.12")
+	file(GLOB files ${CMAKE_CURRENT_SOURCE_DIR}/${dir}/*${extension})
+      else()
+	file(GLOB files CONFIGURE_DEPENDS
+	  ${CMAKE_CURRENT_SOURCE_DIR}/${dir}/*${extension}
+	  )
+      endif()
       foreach(file ${files})
         latex_get_filename_component(filename ${file} NAME)
         list(APPEND image_list ${dir}/${filename})
