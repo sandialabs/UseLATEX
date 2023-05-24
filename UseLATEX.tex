@@ -97,9 +97,9 @@
   \section{Download}
   \label{sec:Download}
 
-  \UseLATEX is currently posted to the CMake Wiki at
+  \UseLATEX is available at this repo:
   \begin{quote}
-    \href{http://public.kitware.com/Wiki/CMakeUserUseLATEX}{http://public.kitware.com/Wiki/CMakeUserUseLATEX}.
+    \url{https://gitlab.kitware.com/kmorel/UseLATEX}
   \end{quote}
 
   %-----------------------------------------------------------------------------
@@ -228,7 +228,7 @@ add_latex_document(MyDoc.tex
   %$
 
   For every image file specified and found with the \textcmake{IMAGE\_DIRS} and \textcmake{IMAGES} options, \UseLATEX adds makefile targets to use ImageMagick's \textprog{magick} or \textprog{convert} to convert the file types to those appropriate for the build.\footnote{The \textprog{convert} program was essentially renamed \textprog{magick} in ImageMagick 7.0. Most, but not all, recent installations provide both. \UseLATEX looks for both just in case.}
-  If you do not have ImageMagick, you can get it for free from \href{http://www.imagemagick.org}{http://www.imagemagick.org}.
+  If you do not have ImageMagick, you can get it for free from \url{http://www.imagemagick.org}.
   CMake will also give you a \textcmakevar{LATEX\_SMALL\_IMAGES} option that, when on, will downsample raster images.
   This can help speed up building and viewing documents.
   It will also make the output image sizes smaller.
@@ -790,18 +790,18 @@ add_latex_document(UberReport.tex
 
   I have successfully used two different ports of LaTeX for windows: the
   \href{http://www.cygwin.com/}{cygwin} port
-  (\href{http://www.cygwin.com/}{http://www.cygwin.com/}) and the
+  (\url{http://www.cygwin.com/}) and the
   \href{http://www.miktex.org/}{\miktex} port
-  (\href{http://www.miktex.org/}{http://www.miktex.org/}).
+  (\url{http://www.miktex.org/}).
 
   If you use the cygwin port of \latex, you must also use the cygwin port
   of CMake, make, and ImageMagick. If you use the \miktex port of \latex,
   you must use the CMake from
-  \href{http://www.cmake.org/HTML/Download.html}{http://www.cmake.org/HTML/Download.html},
+  \url{http://www.cmake.org/HTML/Download.html},
   the ImageMagick port from
-  \href{http://www.imagemagick.org/script/binary-releases.php#windows}{http://www.imagemagick.org/script/binary-releases.php\#windows},
+  \url{http://www.imagemagick.org/script/binary-releases.php#windows},
   and a native build tool like MSVC or the GNU make port at
-  \href{http://unxutils.sourceforge.net/}{http://unxutils.sourceforge.net/}.
+  \url{http://unxutils.sourceforge.net/}.
   \emph{Do not use the ``native'' CMake program with any cygwin programs or
   the cygwin CMake program with any non-cygwin programs.} This issue at
   hand is that the cygwin ports create and treat filenames differently then
@@ -824,16 +824,9 @@ add_latex_document(UberReport.tex
   \latex and some of the supporting programs like CMake and ImageMagick are
   not typically installed (whereas on Linux they often are).
 
-  Most applications port fairly easily to Mac OS so long as you are willing
-  to use them as typical Unix or X11 programs.  To make things even easier,
-  I recommend taking advantage of a Mac porting project to make this
-  process even easier.  \href{http://www.macports.org}{MacPorts}
-  (\href{http://www.macports.org}{http://www.macports.org}) is a good tool
-  providing a comprehensive set of tool ports including \latex, CMake, and
-  ImageMagick.  The \href{http://www.finkproject.org/}{fink project} and
-  \href{http://finkcommander.sourceforge.net/}{FinkCommander}
-  (\href{http://finkcommander.sourceforge.net/}{http://finkcommander.sourceforge.net/})
-  is a similar although less active project.
+  Most applications port fairly easily to Mac OS so long as you are willing to use them as typical Unix or X11 programs.
+  To make things even easier, I recommend taking advantage of a Mac porting project to make this process even easier.
+  \href{http://www.macports.org}{MacPorts} (\url{http://www.macports.org}) and \href{https://brew.sh/}{Homebrew} (\url{https://brew.sh/}) are both good tools for this purpose.
 
   \subsection{How do I process with \xelatex?}
   \label{sec:How_do_I_process_with_XeLaTeX}
