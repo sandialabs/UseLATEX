@@ -1,0 +1,11 @@
+This test checks that command line arguments can be set using the
+COMPILE_FLAGS property on the dvi and pdf targets. The test adds an
+`-output-directory` flag to the compile to redirect the output files to the
+`output-files` subdirectory.
+
+Note that this test compile flag messes up the file dependencies used by
+CMake and the build program. The build will happen every time even if it
+does not need to. It also messes up dependent builds such as making the ps
+from the dvi (since the dvi is not created where expected). But it will
+indicate whether the argument is added successfully by where the output
+files are created.

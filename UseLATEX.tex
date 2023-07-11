@@ -2,7 +2,7 @@
 
 \documentclass{article}
 
-\newcommand{\UseLATEXVersion}{2.7.2}
+\newcommand{\UseLATEXVersion}{2.8.0}
 \newcommand{\SANDNumber}{SAND 2008-2743P}
 
 % This wonderful package allows hyphenation in tt fonts and hyphenation of
@@ -777,6 +777,36 @@ add_latex_document(UberReport.tex
   (\latex will first look in the build directory, then the directories listed in \textcmake{INCLUDE\_DIRECTORIES} in the order given, and then system directories.)
   Thus, in the previous example if both reports had image files with the same name, the second report will likely include images from the first report.
 
+  \subsection{Specifying Command Line Arguments}
+  \label{sec:SpecifyingCommandLineArguments}
+
+  It is usually safest to let \UseLATEX set the arguments to the \latex commands for you.
+  However, there are some rare cases where you may need to add your own command line options.
+  For example, you may need to add a flag like \textcmake{-shell-escape} or \textcmake{--enable-write18} to enable some packages (see Section \ref{sec:How_do_I_resolve_write_18_errors_with_pstricks_or_pdftricks} for details).
+
+  One way to add flags to the \latex compile is to add them to the \textcmakevar{LATEX\_COMPILER\_FLAGS} CMake variable.
+  This is particularly useful if you want to add a flag temporarily that does not always need to be set.
+  For example, you could add \textcmake{-draftmode} to turn on draft mode and suppress the final output (for testing purposes).
+
+  However, this option is tedious and confusing if this is an option that has to be added every time to make the build work.
+  If you want your \textfile{CMakeLists.txt} to automatically add this option every time, you can do so using the \textcmake{COMPILER\_FLAGS} target property.
+  This property is attached to the \textmaketarget{\emph{$\langle$doc$\rangle$}\_dvi} or \textmaketarget{\emph{$\langle$doc$\rangle$}\_pdf} target, where \textmaketarget{\emph{$\langle$doc$\rangle$}} is the name of the \latex document being created (as described in Section \ref{sec:BuldingMultipleLatexDocuments}).
+  The text in this property is added to the command line when executing \textprog{latex} or \textprog{pdflatex}.
+
+  This target property can be added using the \textcmake{set\_target\_properties} CMake function.
+  Here is an example that adds \textcmake{--enable-write18} to both the dvi and pdf builds.
+
+  \begin{CodeListing}
+add_latex_document(HelloWorld.tex)
+
+set_target_properties(HelloWorld_dvi HelloWorld_pdf
+  PROPERTIES COMPILER_FLAGS "--enable-write18"
+  )
+  \end{CodeListing}
+
+  Be aware that different distributions of \latex may accept different command line arguments.
+  By adding compiler flags this way, your \latex document may not compile correctly on machines that are not your own.
+
   %-----------------------------------------------------------------------------
 
   \section{Frequently Asked Questions}
@@ -1062,35 +1092,32 @@ add_latex_document(MyDoc.tex
   \textlatexpackage{pdftricks} packages may need to run commands on your
   system to, for example, convert graphics from one format to another.
 
-  Unfortunately, allowing \latex to run commands on your system can be
-  considered a security issue.  Some versions of \latex such as \miktex
-  disable the feature by default.  Thus, in order to use packages that rely
-  on \textlatex|\write18|, you may have to enable the feature, typically
-  with a command line option.  For \miktex, this command line option is
-  \textcmake{--enable-write18}.
+  Unfortunately, allowing \latex to run commands on your system is a security issue.
+  Consequently, most versions of \latex disable this feature by default.
+  Thus, to use packages that rely
+  on \textlatex|\write18|, you may have to enable the feature via a command line option that allows the \textfile{.tex} document to execute arbitrary commands on your computer.
+  This is typically done by adding a command line option, which is usually either \textcmake{--enable-write18} or \textcmake{-shell-escape}.
 
-  You can instruct \UseLATEX to pass any flag to \latex by adding it to the
-  \textcmakevar{LATEX\_COMPILER\_FLAGS} CMake variable.  One way to do this
-  is through the CMake GUI.  Simply go to the advanced variables, find
-  \textcmakevar{LATEX\_COMPILER\_FLAGS}, and add
-  \textcmake{--enable-write18} (or equivalent flag) to the list of
-  arguments.
+  Section \ref{sec:SpecifyingCommandLineArguments} describes how to pass custom flags to \latex.
+  One way to do this is by adding \textcmake{--enable-write18} (or \textcmake{-shell-escape}) to the \textcmakevar{LATEX\_COMPILER\_FLAGS} CMake variable during configuration.
+  This is easy to do and allows you to customize the argument based on what \latex distribution you are using.
+  However, it also means you have to make this change every time you configure the project, and will be confusing to new users.
 
-  You can also automatically add this flag by setting the flag in your
-  \textfile{CMakeLists.txt} file.  For example:
+  An alternate way to do this is by adding \textcmake{--enable-write18} (or \textcmake{-shell-escape}) to the \textcmake{COMPILER\_FLAGS} target property for the \textmaketarget{*\_dvi} and/or \textmaketarget{*\_pdf} target.
 
   \begin{CodeListing}
-set(LATEX_COMPILER_FLAGS
-  "-interaction=nonstopmode --enable-write18"
-  CACHE STRING "Flags passed to latex."
+add_latex_document(HelloWorld.tex)
+
+set_target_properties(HelloWorld_dvi HelloWorld_pdf
+  PROPERTIES COMPILER_FLAGS "--enable-write18"
   )
-include(UseLATEX.cmake)
   \end{CodeListing}
 
   The disadvantage of this latter approach is the reduction of portability.
-  This addition could cause a failure for any \latex implementation that
-  does not support the \textcmake{--enable-write18} flag (for which there
-  are many).
+  This addition could cause a failure for any \latex implementation that does not support the \textcmake{--enable-write18} flag (for which there are many).
+  It is also allowing \latex to execute arbitrary commands on your system, so you might be introducing security vulnerabilities to anyone compiling your repo.
+
+  See Section \ref{sec:SpecifyingCommandLineArguments} for more details on adding custom command line argument flags to the \latex build.
 
   \subsection{Why is \UseLATEX complaining about image file names?}
   \label{sec:Why_is_UseLATEX_complaining_about_image_file_names}
